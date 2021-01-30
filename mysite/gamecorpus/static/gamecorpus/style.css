@@ -1,0 +1,27 @@
+.main {
+  margin: auto;
+  width: 800px;
+}
+.search {
+  margin: 20px;
+  margin-top: 0;
+  padding-top: 20px;
+  position: fixed;
+  z-index: 2;
+  background-color: white;
+  width: 100%;
+  top: 0;
+}
+.submit_button {
+  margin: 20px;
+}
+.render_area {
+  margin: 20px;
+  margin-top: 130px;
+}
+.section {
+  margin: 20px;
+}
+.highlight {
+  color: red;
+}

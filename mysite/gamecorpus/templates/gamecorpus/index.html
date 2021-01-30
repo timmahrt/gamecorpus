@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Game Corpus</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'gamecorpus/style.css' %}">
+  </head>
+  <body>
+    <div class="main">
+      <div class="search">
+        Search the video game corpus
+        <form action="{% url 'index' %}" method="get">
+          <div class='query_items'>
+            <input type="text" id="search_text" name="search_text">
+          </div>
+          <input type="checkbox" name="tokenized" value="tokenized"><label for="tokenized">Search Tokenized Text</label></input>
+          <div class="pos_checklist">
+            <input type="checkbox" name="N" value="N"><label for="N">Noun</label></input>
+            <input type="checkbox" name="V" value="V"><label for="V">Verb</label></input>
+            <input type="checkbox" name="Adj" value="Adj"><label for="Adj">Adjective</label></input>
+            <input type="checkbox" name="Adv" value="Adv"><label for="Adv">Adverb</label></input>
+            <input type="checkbox" name="Adn" value="Adn"><label for="Adn">Adnomial</label></input>
+            <input type="checkbox" name="AdjN" value="AdjN"><label for="AdjN">Adjectival Noun</label></input>
+          </div>
+          <div class='submit_button'>
+            <input type="submit" value="Search">
+          </div>
+        </form>
+      </div>
+      <div class="render_area">
+        {% if search_results %}
+          Results...
+          {% for result in search_results %}
+        <div class="section">
+          <div class="header">
+            {{ result.title }}
+          </div>
+          <div class="utterance">
+            <div class="speaker">
+              {{ result.speaker }}
+            </div>
+            <div class="speech">
+              {{ result.sentence |safe }}
+            </div>
+          </div>
+        </div>
+          {% endfor %}
+        {% else %}
+          No results found...
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>
