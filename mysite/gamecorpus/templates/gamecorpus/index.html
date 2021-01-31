@@ -5,30 +5,49 @@
     <title>Game Corpus</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'gamecorpus/style.css' %}">
+    <script src="{% static 'gamecorpus/corpus.js' %}"></script> 
   </head>
   <body>
     <div class="main">
       <div class="search">
         Search the video game corpus
         <form action="{% url 'index' %}" method="get">
-          <div class='query_items'>
+          <div class='query-items'>
             <input type="text" id="search_text" name="search_text">
           </div>
-          <input type="checkbox" name="tokenized" value="tokenized"><label for="tokenized">Search Tokenized Text</label></input>
-          <div class="pos_checklist">
-            <input type="checkbox" name="N" value="N"><label for="N">Noun</label></input>
-            <input type="checkbox" name="V" value="V"><label for="V">Verb</label></input>
-            <input type="checkbox" name="Adj" value="Adj"><label for="Adj">Adjective</label></input>
-            <input type="checkbox" name="Adv" value="Adv"><label for="Adv">Adverb</label></input>
-            <input type="checkbox" name="Adn" value="Adn"><label for="Adn">Adnomial</label></input>
-            <input type="checkbox" name="AdjN" value="AdjN"><label for="AdjN">Adjectival Noun</label></input>
+          <div class="pos-checklist">
+            <input type="checkbox" name="tokenized" value="tokenized" onclick="toggleTokenized()">
+              <label for="tokenized">Search Tokenized Text</label>
+            </input>
+            <span class='tooltip-anchor'>
+              (?)
+              <span class='tooltip'>
+                If 'tokenized' is selected, corpus texts are split up by word and each word's part-of-speech is analyzed. Queries will then only be over individual words.
+              </span>
+            </span>
+            <input disabled="True" type="checkbox" class="pos-checkbox" id="N" name="N" value="N"><label for="N">Noun</label></input>
+            <input disabled="True" type="checkbox" class="pos-checkbox" id="V" name="V" value="V"><label for="V">Verb</label></input>
+            <input disabled="True" type="checkbox" class="pos-checkbox" id="Adj" name="Adj" value="Adj"><label for="Adj">Adjective</label></input>
+            <input disabled="True" type="checkbox" class="pos-checkbox" id="Adv" name="Adv" value="Adv"><label for="Adv">Adverb</label></input>
+            <input disabled="True" type="checkbox" class="pos-checkbox" id="Adn" name="Adn" value="Adn"><label for="Adn">Adnomial</label></input>
+            <input disabled="True" type="checkbox" class="pos-checkbox" id="AdjN" name="AdjN" value="AdjN"><label for="AdjN">Adjectival Noun</label></input>
           </div>
-          <div class='submit_button'>
+          <div class="limit-options">
+          <div class='submit-button'>
             <input type="submit" value="Search">
+          </div>
+            <span class='hits-per-game-input'>
+              Hits / game
+              <input type="text" class="short-text-input" id="hits_per_game" name="hits_per_game" placeholder="1">
+            </span>
+            <span>
+              Total hits
+              <input type="text" class="short-text-input" id="total_hits" name="total_hits" placeholder="10">
+            </span>
           </div>
         </form>
       </div>
-      <div class="render_area">
+      <div class="render-area">
         {% if search_results %}
           Results...
           {% for result in search_results %}

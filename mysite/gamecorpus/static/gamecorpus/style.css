@@ -12,16 +12,69 @@
   width: 100%;
   top: 0;
 }
-.submit_button {
-  margin: 20px;
+.submit-button {
+  padding-right: 40px;
+  display: inline-block;
 }
-.render_area {
+.render-area {
   margin: 20px;
-  margin-top: 130px;
+  margin-top: 150px;
 }
 .section {
-  margin: 20px;
+  padding: 20px;
+  padding-bottom: 30px;
+  background-color: lightblue;
+  font-family: sans-serif;
+}
+.section:nth-child(odd) {
+  background-color: lightgreen;
 }
 .highlight {
   color: red;
+}
+.header {
+  font-style: italic;
+}
+.speaker {
+  display: inline-block;
+  width: 150px;
+  vertical-align: top;
+}
+.speech {
+  display: inline-block;
+  width: 500px;
+}
+.utterance {
+  margin: 10px;
+}
+.tooltip {
+  z-index: 3;
+  background-color: darkgrey;
+  width: 300px;
+  position: absolute;
+  visibility: hidden;
+}
+.tooltip-anchor {
+  text-decoration: underline;
+}
+.tooltip-anchor:hover .tooltip {
+  visibility: visible;
+}
+.tokenized-checkbox {
+  padding: 10px;
+}
+.pos-checklist {
+  padding: 10px;
+}
+.short-text-input {
+  width: 50px;
+}
+.limit-options {
+  padding: 10px;
+}
+.hits-per-game-input {
+  padding: 20px;
+}
+.pos-checkbox {
+  margin-left: 15px;
 }
