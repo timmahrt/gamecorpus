@@ -4,12 +4,22 @@ import json
 import re
 
 
+def loadJsonFile(fn):
+    with io.open(fn, "r", encoding="utf-8") as fd:
+        return json.load(fd)
+
+
+def saveJsonFile(fn, jsonTxt):
+    with io.open(fn, "w", encoding="utf-8") as fd:
+        json.dump(jsonTxt, fd, ensure_ascii=False)
+
+
 def _iterateJson(root):
     jsonList = os.listdir(root)
     jsonList = [fn for fn in jsonList if ".json" in fn]
     jsonList.sort()
     for fn in jsonList:
-        with io.open(os.path.join(root, fn)) as fd:
+        with io.open(os.path.join(root, fn), "r", encoding="utf-8") as fd:
             yield fn, json.load(fd)
 
 
