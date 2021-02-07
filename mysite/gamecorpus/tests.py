@@ -53,6 +53,13 @@ class GamecorpusTestCase(TestCase):
             [[["大丈夫", "形状詞", "大丈夫"], ["です", "助動詞", "です"], ["。", "補助記号", "。"]]],
         )
 
+    def testClimbUpTree(self):
+        word = m.TokenizedWord.objects.all().first()
+        tokenizedSentenceWord = word.tokenizedsentenceword_set.first()
+        script = tokenizedSentenceWord.sentence.utterance.event.partition.script
+
+        self.assertEqual("Fantasy Adventure", script.title)
+
     def testModelCoherence(self):
         script = m.GameScript.objects.all().get(title="Fantasy Adventure")
 

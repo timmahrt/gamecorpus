@@ -23,6 +23,5 @@ class Command(BaseCommand):
             if not match:
                 models.createFromJson(jsonText)
                 self.stdout.write(f"{title}:{version} added")
-                exit()
             else:
                 self.stdout.write(f"{title}:{version} already exists -- skipping")

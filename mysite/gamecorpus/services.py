@@ -3,6 +3,8 @@ import io
 import json
 import re
 
+from gamecorpus import models
+
 
 def loadJsonFile(fn):
     with io.open(fn, "r", encoding="utf-8") as fd:
@@ -31,6 +33,78 @@ def _iterateTexts(root):
                     if utterance["type"] != "speaker":
                         continue
                     yield gameData["game_content"], utterance
+
+
+def searchDb(root, reStr, posList, tokenized, limitPerGame=1, limit=10):
+    if tokenized:
+        matches = _tokenizedDbSearch(reStr, posList, limitPerGame, limit)
+    else:
+        matches = _dbSearch(reStr, limitPerGame, limit)
+
+    return matches
+
+
+def _tokenizedDbSearch(reStr, posList, limitPerGame=1, limit=10):
+    matches = []
+
+    searchRe = re.compile(reStr)
+    words = models.TokenizedWord.objects.all()
+    if posList:
+        posList = [posMap[pos] for pos in posList]
+        words = words.filter(pos__in=posList)
+    for word in words:
+        match = searchRe.match(word.text)
+        if match:
+            for tokenizedSentenceWord in word.tokenizedsentenceword_set.all():
+                utterance = tokenizedSentenceWord.sentence.utterance
+
+                i = [ts for ts in utterance.tokenizedsentence_set.all()].index(
+                    tokenizedSentenceWord.sentence
+                )
+
+                matches.append(
+                    {
+                        "title": utterance.event.partition.script.title,
+                        "speaker": utterance.speaker,
+                        "match": word.text,
+                        "sentence": wrapMatch(
+                            # TODO: Merge sentences and TokenizedSentence together
+                            utterance.sentence_set.all()[i].text,
+                            match.group(0),
+                        ),
+                    }
+                )
+                if len(matches) > limit:
+                    break
+
+        if len(matches) >= limit:
+            matches = matches[:limit]
+            break
+
+    return matches
+
+
+def _dbSearch(reStr, limitPerGame=1, limit=10):
+    matches = []
+
+    searchRe = re.compile(reStr)
+    print(len(models.Sentence.objects.all()))
+    for i, sentence in enumerate(models.Sentence.objects.all()):
+        match = searchRe.match(sentence.text)
+        if match:
+            matchTxt = match.group(0)
+            matches.append(
+                {
+                    "title": sentence.utterance.event.partition.script.title,
+                    "speaker": sentence.utterance.speaker,
+                    "match": matchTxt,
+                    "sentence": wrapMatch(sentence.text, matchTxt),
+                }
+            )
+            if len(matches) >= limit:
+                break
+
+    return matches
 
 
 def searchCorpus(root, reStr, posList, tokenized, limitPerGame=1, limit=10):

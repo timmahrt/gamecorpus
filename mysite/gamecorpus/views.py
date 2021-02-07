@@ -30,7 +30,7 @@ def index(request):
         limitPerGame = _getNumberFromInput(request, "hits_per_game", 1)
         limit = _getNumberFromInput(request, "total_hits", 10)
 
-        searchResults = services.searchCorpus(
+        searchResults = services.searchDb(
             os.path.join(dir_path, "data"),
             searchRe,
             posList,
