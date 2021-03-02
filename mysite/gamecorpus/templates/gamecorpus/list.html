@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja-jp">
+
+<head>
+    <meta charset="utf-8">
+    <title>Game Corpus</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'gamecorpus/style.css' %}">
+    <script src="{% static 'gamecorpus/corpus.js' %}"></script>
+</head>
+
+<body>
+    <div class="main">
+        <div class="page_title">
+            Game Corpus Scripts
+        </div>
+        <div class="description">
+            The search function will search through the full script of the following texts. Here it is possible to read
+            through the full texts.
+        </div>
+        <div class="description">
+            List of available works:
+        </div>
+        {% for title in availables_game_titles %}
+        <div class="game_link">
+            <a href="scriptSections.html?title={{title}}">{{title}}</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>

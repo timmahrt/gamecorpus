@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja-jp">
+
+<head>
+    <meta charset="utf-8">
+    <title>Game Corpus</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'gamecorpus/style.css' %}">
+    <script src="{% static 'gamecorpus/corpus.js' %}"></script>
+</head>
+
+<body>
+    <div class="main">
+        <div class="game_title">
+            {{title}}
+        </div>
+        {% for partition_name in available_partition_names %}
+        <div class="partition_title">
+            <a href="script.html?title={{title}}&partition_name={{partition_name}}">{{partition_name}}</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>

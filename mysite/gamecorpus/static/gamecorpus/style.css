@@ -1,6 +1,7 @@
 .main {
   margin: auto;
   width: 800px;
+  font-family: sans-serif;
 }
 .search {
   margin: 20px;
@@ -77,4 +78,61 @@
 }
 .pos-checkbox {
   margin-left: 15px;
+}
+.script_title {
+  font-size:24px;
+  width: 400px;
+  margin: auto;
+}
+.script_event {
+padding-top: 20px;
+padding-top: 40px;
+border-spacing: 0;
+overflow-wrap: break-word;
+width: 800px;
+}
+.script_utterance_speaker_a {
+  background-color: powderblue;
+}
+.script_utterance_speaker_b {
+  background-color: lightgray;
+}
+.script_utterance_context {
+  background-color: palegreen;
+}
+.script_utterance_choice {
+  background-color: #F9FF9F; /* Pale Yellow */
+}
+.source_text_cell {
+  width: 40%;
+}
+.dialog_cell {
+  border: 1px;
+  border-style: solid;
+}
+.speaker_cell {
+  width: 15%;
+}
+.partition_title {
+  padding: 10px;
+}
+.game_title {
+  font-size: 25px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  width: 400px;
+  margin: auto;
+}
+.game_link {
+  padding: 10px;
+}
+.description {
+ padding: 20px;
+}
+.page_title {
+  font-size: 25px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  width: 400px;
+  margin: auto;
 }
