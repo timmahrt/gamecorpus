@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='section'>
+    <div class='page_title'>
+        The Game Script Corpus
+    </div>
+    <div>
+        <div class="subdescription">
+            The following is a collection of video game scripts that I've found across the internet.
+            I found that they were a great tool for studying Japanese but I wanted to customize them for my study usage.
+        </div>
+        <div class="subdescription">
+            I have a setup that I use for playing games in Japanese. Click here for more information:<br />
+            <a href="setup/how_to_use.html">How to use this site</a>
+        </div>
+        <div class="subdescription">
+            Many of the scripts on this page I found here:<br>
+            <a href="https://docs.google.com/spreadsheets/d/1ukDIWSkh_xvpppPbgs1nUR2kaEwFaWlsJgZUlb9LuTs/edit#gid=0"
+                target="blank">Jo Mako's Japanese Guide Spreadsheet</a>
+        </div>
+        <div class="subdescription">
+            Also, this looks like an even better resource, if you're on Windows and want to play an NES or SNES
+            game:<br>
+            <a href="https://legendsoflocalization.com/wanderbar/" target="blank">Wanderbar</a>
+        </div>
+    </div>
+</div>
+
+<div class='section'>
+    <div class='page_title'>
+        Script Generation
+    </div>
+    <div>
+        <div class="subdescription">
+            The scripts are cleaned up through an automated process. The cleaning process is not perfect and there are
+            likely weird errors, although I have tried to minimize these.
+        </div>
+        <div class="subdescription">
+            Games are partitioned according to the text source. So, for example, Final Fantasy 7's script
+            has a few long pages whereas Final Fantasy 8's script is divided across many pages, but each page is short.
+        </div>
+        <div class="subdescription">
+            The code to generate all of the script files is available on
+            <a href="https://github.com/timmahrt/gameDialogCleaner" target="blank">github</a>.
+        </div>
+        <div class="subdescription">
+            This website was written in django and is also available on
+            <a href="https://github.com/timmahrt/gamecorpus" target="blank">github</a>.
+        </div>
+    </div>
+</div>
+{% endblock %}

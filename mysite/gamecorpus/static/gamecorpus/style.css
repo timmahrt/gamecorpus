@@ -3,10 +3,17 @@
   width: 800px;
   font-family: sans-serif;
 }
+.game_scripts_header {
+  z-index: 3;
+  position: fixed;
+  top: 0;
+  background-color:white;
+  width: 100%;
+}
 .search {
   margin: 20px;
-  margin-top: 40px;
-  padding-top: 0;
+  margin-top: 0;
+  padding-top: 40px;
   position: fixed;
   z-index: 2;
   background-color: white;
@@ -43,7 +50,7 @@
 }
 .speech {
   display: inline-block;
-  width: 500px;
+  width: 250px;
 }
 .utterance {
   margin: 10px;
@@ -129,6 +136,9 @@ width: 800px;
 .description {
  padding: 20px;
 }
+.subdescription {
+  padding: 10px;
+}
 .page_title {
   font-size: 25px;
   padding-top: 25px;
@@ -168,4 +178,10 @@ width: 800px;
 }
 .navigation_link {
   padding-left: 40px;
+}
+.footer {
+  clear: both;
+  position: relative;
+  height: 20px;
+
 }

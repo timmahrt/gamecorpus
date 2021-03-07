@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="search" notranslate>
+  Search the game script corpus
+  <form action="{% url 'search' %}" method="get">
+    <div class='query-items'>
+      <input type="text" id="search_text" name="search_text">
+    </div>
+    <div class="pos-checklist">
+      <input type="checkbox" name="tokenized" value="tokenized" onclick="toggleTokenized()">
+      <label for="tokenized">Search Tokenized Text</label>
+      </input>
+      <span class='tooltip-anchor'>
+        (?)
+        <span class='tooltip'>
+          If 'tokenized' is selected, corpus texts are split up by word and each word's part-of-speech is analyzed.
+          Queries will then only be over individual words.
+        </span>
+      </span>
+      <input disabled="True" type="checkbox" class="pos-checkbox" id="N" name="N" value="N"><label
+        for="N">Noun</label></input>
+      <input disabled="True" type="checkbox" class="pos-checkbox" id="V" name="V" value="V"><label
+        for="V">Verb</label></input>
+      <input disabled="True" type="checkbox" class="pos-checkbox" id="Adj" name="Adj" value="Adj"><label
+        for="Adj">Adjective</label></input>
+      <input disabled="True" type="checkbox" class="pos-checkbox" id="Adv" name="Adv" value="Adv"><label
+        for="Adv">Adverb</label></input>
+      <input disabled="True" type="checkbox" class="pos-checkbox" id="Adn" name="Adn" value="Adn"><label
+        for="Adn">Adnomial</label></input>
+      <input disabled="True" type="checkbox" class="pos-checkbox" id="AdjN" name="AdjN" value="AdjN"><label
+        for="AdjN">Adjectival Noun</label></input>
+    </div>
+    <div class="limit-options">
+      <div class='submit-button'>
+        <input type="submit" value="Search">
+      </div>
+      <span class='hits-per-game-input'>
+        Hits / game
+        <input type="text" class="short-text-input" id="hits_per_game" name="hits_per_game" placeholder="1">
+      </span>
+      <span>
+        Total hits
+        <input type="text" class="short-text-input" id="total_hits" name="total_hits" placeholder="10">
+      </span>
+    </div>
+  </form>
+</div>
+<div class="render-area">
+  {% if search_results %}
+  Results...
+  {% for result in search_results %}
+  <div class="section">
+    <div class="header">
+      {{ result.title }}
+    </div>
+    <div class="utterance">
+      <div class="speaker">
+        {{ result.speaker }}
+      </div>
+      <div class="speech notranslate">
+        {{ result.sentence |safe }}
+      </div>
+      <div class="speech">
+        {{ result.sentence |safe }}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  No results found...
+  {% endif %}
+</div>
+{% endblock %}

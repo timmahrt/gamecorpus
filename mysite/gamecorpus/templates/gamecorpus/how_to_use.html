@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+<div class='section'>
+    <div class='page_title'>
+        How To Use
+    </div>
+    <div>
+        <ul>
+            <li class="spaced_list"><a href="#setup">Operational setup</a></li>
+            <li class="spaced_list"><a href="#requirements">Needed tools</a></li>
+            <li class="spaced_list"><a href="#yomichan_config">Yomichan configuration</a></li>
+            <li class="spaced_list"><a href="#generated_cards">Generated cards</a></li>
+            <li class="spaced_list"><a href="#main_interface">Main interface</a></li>
+            <li class="spaced_list"><a href="#look_up_words">Looking up words with Yomichan</a></li>
+            <li class="spaced_list"><a href="#highlighting_text">Highlighting text</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class='section'>
+    <div class='page_title'>
+        <a name="setup">Operational Setup</a>
+    </div>
+    <div>
+        To use this site effectively, I have two screens open--one for the game and one for this website.
+        <br /><br />
+        While playing the game, I can reference the original game script with its translation.
+        <br /><br />
+        If I encounter words I'm interested in learning, I can automatically generate flashcards for them that take into
+        consideration the context that the word appears in.
+        <br /><br />
+        <img src="{% static 'gamecorpus/setup.png' %}" width="400px">
+    </div>
+</div>
+
+<div class='section'>
+    <div class='page_title'>
+        <a name="requirements">Needed Tools
+    </div>
+    <div>
+        Everything on this list is freely available.
+        <ul>
+            <li>A browser with a translation plugin for translating the whole website</li>
+            <li><a href="https://foosoft.net/projects/yomichan/">Yomichan</a> browser extension</li>
+            <li>AnkiConnect (Consult the Yomichan browser extension configuration)</li>
+            <li><a href="https://apps.ankiweb.net/">Anki</a></li>
+            <li>Super Simple Highlighter for Chrome (or other highlighting browser extension)</li>
+        </ul>
+    </div>
+</div>
+
+<div class='section'>
+    <div class='page_title'>
+        <a name="yomichan_config">Yomichan configuration</a>
+    </div>
+    <div>
+        You can customize Yomichan to work the way you want, but this generates a card containing the target word and
+        the sentence it appears in. The other side of the card is the English translation.
+        <br /><br />
+        <img src="{% static 'gamecorpus/yomichan_configuration.png' %}" width="400px">
+    </div>
+</div>
+
+<div class='section'>
+    <div class='page_title'>
+        <a name="generated_cards">Generated cards</a>
+    </div>
+    <div>
+        The end result is cards that look like this:
+        <br /><br />
+        <img src="{% static 'gamecorpus/anki_generated_card.png' %}" width="400px">
+    </div>
+</div>
+
+<div class='section'>
+    <div class='page_title'>
+        <a name="main_interface">Main interface</a>
+    </div>
+    <div>
+        Here is what texts look like.
+        There are two columns containing identical text.
+        But the left side text is marked with 'notranslate'.
+        Services like Google translation shouldn't translate the text even if you ask it to.
+        <br /><br />
+        <img src="{% static 'gamecorpus/before_translation.png' %}" width="600px">
+        <br /><br />
+        I've translated the page with google translate and this is what the result looks like.
+        At a glance, I can check my understanding while I play!
+        <br /><br />
+        <img src="{% static 'gamecorpus/after_translation.png' %}" width="600px">
+    </div>
+</div>
+
+<div class='section'>
+    <div class='page_title'>
+        <a name="look_up_words">Looking up words with Yomichan</a>
+    </div>
+    <div>
+        If there is a word that I don't know, I can hover over it and press 'shift' to get Yomichan to look it up.
+        It usually does a good job unless the word is madeup.
+        For example, it doesn't parse '神羅'/'Shinra' the fictional energy company in FF7.
+        <br /><br />
+        I can save the word with context and translation as an anki flashcard just by pressing the book icon.
+        <br /><br />
+        <img src="{% static 'gamecorpus/with_yomichan.png' %}" width="600px">
+    </div>
+</div>
+
+<div class='section'>
+    <div class='page_title'>
+        <a name="highlighting_text">Highlighting text</a>
+    </div>
+    <div>
+        Yomichan is good for quickly looking up things.
+        But if I want to go a little deeper, I flag text for review with a highlighter.
+        These highlights are saved.
+        Even if I close the page and come back later, I can still see them.
+        Doing this, I can study more deeply after a play session or consult with native speakers.
+        <br /><br />
+        With Super Simple Highlighter for Chrome, and perhaps others, I can see a list of all highlights on a page,
+        which makes finding all of my highlights easy.
+        <br /><br />
+        I set it up so that I can select some text and press a keyboard shortcut to register the text as a highlight.
+        <br /><br />
+        <img src="{% static 'gamecorpus/with_highlighter.png' %}" width="600px">
+    </div>
+</div>
+
+{% endblock %}

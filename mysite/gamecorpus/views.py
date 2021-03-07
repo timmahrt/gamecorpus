@@ -18,6 +18,18 @@ def _getNumberFromInput(request, fieldName, defaultVal):
 
 
 def index(request):
+    return render(request, "gamecorpus/index.html", {})
+
+
+def howToUse(request):
+    return render(request, "gamecorpus/how_to_use.html", {})
+
+
+def about(request):
+    return render(request, "gamecorpus/about.html", {})
+
+
+def search(request):
     searchResults = []
     if "search_text" in request.GET:
         searchRe = request.GET["search_text"]
@@ -42,19 +54,19 @@ def index(request):
 
     context = {"search_results": searchResults}
 
-    return render(request, "gamecorpus/index.html", context)
+    return render(request, "gamecorpus/search.html", context)
 
 
-def scripts(request):
+def gameScripts(request):
     scripts = models.GameScript.objects.values_list(
         "title", "isPlayed", "sourceAttributionUrl"
     ).all()
     context = {"availables_game_titles": scripts}
 
-    return render(request, "gamecorpus/list.html", context)
+    return render(request, "gamecorpus/game_scripts.html", context)
 
 
-def scriptSections(request):
+def gameScriptSections(request):
     title = request.GET["title"]
     script = models.GameScript.objects.get(title=title)
     comment = script.comment
@@ -79,10 +91,10 @@ def scriptSections(request):
         "total_word_count": script.numWords,
     }
 
-    return render(request, "gamecorpus/game_sections.html", context)
+    return render(request, "gamecorpus/game_script_sections.html", context)
 
 
-def script(request):
+def gameScript(request):
     title = request.GET["title"]
     friendlyTitle = title.lower().replace(" ", "_")
     partitionName = request.GET["partition_name"]
@@ -100,7 +112,7 @@ def script(request):
         setType = None
         utterances = []
         for utterance in utteranceObjs:
-            setType = setSpeechType(utterance.utteranceType, setType)
+            setType = _setSpeechType(utterance.utteranceType, setType)
             utterances.append(
                 [
                     utterance.speaker,
@@ -125,7 +137,7 @@ def script(request):
     return render(request, "gamecorpus/game_script.html", context)
 
 
-def setSpeechType(currentType, previousSetType):
+def _setSpeechType(currentType, previousSetType):
     setType = currentType
     if currentType == "speaker":
         if previousSetType == "speaker_a":

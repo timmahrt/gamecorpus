@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="main">
-    <div class='game_title'>{{game_title}}</div>
-    <div class='script_title'>{{partition_title}}</div>
-    {% for event in events %}
-    <table class='script_event'>
-        {% for speaker, role, speechList in event %}
-        {% for speechId, speech in speechList %}
-        <tr class='script_utterance script_utterance_{{role}}'>
-            <td class="dialog_cell speaker_cell" id="{{speechId}}_speaker">
-                {% if forloop.counter0 == 0 %}
-                {{speaker}}
-                {% endif %}
-            </td>
-            <td class="notranslate dialog_cell source_text_cell" id="{{speechId}}_source">{{speech}}</td>
-            <td class="dialog_cell source_text_cell" id="{{speechId}}_translation">{{speech}}</td>
-        </tr>
-        {% endfor %}
-        {% endfor %}
-    </table>
+
+<div class='game_title'>{{game_title}}</div>
+<div class='script_title'>{{partition_title}}</div>
+{% for event in events %}
+<table class='script_event'>
+    {% for speaker, role, speechList in event %}
+    {% for speechId, speech in speechList %}
+    <tr class='script_utterance script_utterance_{{role}}'>
+        <td class="dialog_cell speaker_cell" id="{{speechId}}_speaker">
+            {% if forloop.counter0 == 0 %}
+            {{speaker}}
+            {% endif %}
+        </td>
+        <td class="notranslate dialog_cell source_text_cell" id="{{speechId}}_source">{{speech}}</td>
+        <td class="dialog_cell source_text_cell" id="{{speechId}}_translation">{{speech}}</td>
+    </tr>
     {% endfor %}
-</div>
+    {% endfor %}
+</table>
+{% endfor %}
+
 {% endblock %}

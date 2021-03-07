@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page_title">
+    Game Corpus Scripts
+</div>
+<div class="subdescription">
+
+    <div class="subdescription">
+        Here you can access the full script from several games in the original Japanese.
+    </div>
+
+    <div class="subdescription">
+        You can play a game in Japanese and use this website to easily lookup unknown words and phrases. Please read
+        <a href="how_to_use.html">How to Use</a> before getting started.
+    </div>
+
+    <div class="subdescription">
+        ** This website is for education purposes only. **
+    </div>
+</div>
+<div class="game_link title_row">
+    <span class="has_played"></span>
+    <span class="game_link_title">Game Script</span>
+    <span class="game_source_link">Source</span>
+</div>
+{% for title, is_played, source_attribution_link in availables_game_titles %}
+<div class="game_link">
+    <span class="has_played">
+        {% if is_played %}
+        *
+        {% endif %}
+    </span>
+    <span class="game_link_title">
+        <a href="game_script_sections.html?title={{title}}">{{title}}</a>
+    </span>
+    <span class="game_source_link">
+        <a href="{{source_attribution_link}}" target="_blank">text source</a>
+    </span>
+</div>
+{% endfor %}
+
+<div class="description">
+    Items marked with * have been played through using this script.
+</div>
+
+{% endblock %}
