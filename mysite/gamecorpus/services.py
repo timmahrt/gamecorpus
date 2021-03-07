@@ -90,7 +90,7 @@ def _dbSearch(reStr, limitPerGame=1, limit=10):
     searchRe = re.compile(reStr)
     print(len(models.Sentence.objects.all()))
     for i, sentence in enumerate(models.Sentence.objects.all()):
-        match = searchRe.match(sentence.text)
+        match = searchRe.search(sentence.text)
         if match:
             matchTxt = match.group(0)
             matches.append(
