@@ -6,7 +6,12 @@ from django.db import transaction
 
 class GameScript(models.Model):
     title = models.CharField(max_length=100)
+    sourceAttributionUrl = models.CharField(max_length=100, default="")
+    comment = models.CharField(max_length=300, default="")
     version = models.IntegerField(default=1)
+    isPlayed = models.BooleanField(default=False)
+    numSentences = models.IntegerField(default=0)
+    numWords = models.IntegerField(default=0)
 
     class Meta:
         unique_together = ("title", "version")
@@ -19,11 +24,45 @@ class GameScript(models.Model):
             "game_content": self.title,
             "version": self.version,
             "content": [partition.toJson() for partition in self.partition_set.all()],
+            "comment": self.comment,
+            "is_played": self.isPlayed,
         }
+
+    def setWordAndSentenceCounts(self) -> None:
+        scriptNumSentences = 0
+        scriptNumWords = 0
+
+        for partition in self.partition_set.all():
+            numWords = 0
+            numSentences = 0
+            for event in partition.event_set.all():
+                for utterance in event.utterance_set.all():
+                    numSentences += len(utterance.sentence_set.all())
+                    numWords += len(
+                        [
+                            word
+                            for sentence in utterance.tokenizedsentence_set.all()
+                            for word in sentence.tokenizedsentenceword_set.all()
+                        ]
+                    )
+
+            scriptNumWords += numWords
+            scriptNumSentences += numSentences
+
+            partition.numWords = numWords
+            partition.numSentences = numSentences
+            partition.save()
+
+        self.numWords = scriptNumWords
+        self.numSentences = scriptNumSentences
+        self.save()
 
 
 class Partition(models.Model):
     fileName = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, default="")
+    numSentences = models.IntegerField(default=0)
+    numWords = models.IntegerField(default=0)
     script = models.ForeignKey(GameScript, on_delete=models.CASCADE)
 
     class Meta:
@@ -37,7 +76,7 @@ class Partition(models.Model):
         for event in self.event_set.all():
             events.append(event.toJson())
 
-        return {"source": self.fileName, "sections": events}
+        return {"source": self.fileName, "title": self.title, "sections": events}
 
 
 class Event(models.Model):
@@ -129,6 +168,12 @@ class TokenizedWord(models.Model):
     def toJson(self) -> list:
         return [self.text, self.pos, self.lemma]
 
+    def getContainedUtterances(self):
+        return [
+            tokenizedSentenceWord.sentence.utterance
+            for tokenizedSentenceWord in self.tokenizedsentenceword_set
+        ]
+
     @classmethod
     def safeCreate(cls, text: str, pos: str, lemma: str) -> TokenizedWord:
         match = cls.objects.all().filter(text=text, pos=pos, lemma=lemma)
@@ -140,6 +185,20 @@ class TokenizedWord(models.Model):
             tokenizedWord = match.get()
 
         return tokenizedWord
+
+    @classmethod
+    def bulkInsert(cls, tokenizedWords) -> None:
+        words = [word for word, _, _ in tokenizedWords]
+        existingTokenizedWords = (
+            cls.objects.values_list("text", "pos", "lemma").all().filter(text__in=words)
+        )
+        newWords = set(tokenizedWords) - set(existingTokenizedWords)
+        newWords = [
+            TokenizedWord(text=text, pos=pos, lemma=lemma)
+            for text, pos, lemma in newWords
+        ]
+
+        cls.objects.bulk_create(newWords)
 
     class Meta:
         unique_together = ("text", "pos", "lemma")
@@ -179,14 +238,36 @@ class TokenizedSentenceWord(models.Model):
 def createFromJson(json: dict):
     """
     Given a parsed json representation of a gamescript, save it to the database
+
+    TODO: Investigate why this is so slow 1~2 minutes to complete
     """
+    # # Pre-insert all words in the corpus
+    # # (Somehow, this did not change the time-to-completion)
+    # tokenizedWords = []
+    # for jsonPartition in json["content"]:
+    #     for jsonEvent in jsonPartition["sections"]:
+    #         for jsonUtterance in jsonEvent:
+    #             for tokenizedSentence in jsonUtterance["tokenized_speech"]:
+    #                 tokenizedWords.extend(
+    #                     [tuple(tokenizedWord) for tokenizedWord in tokenizedSentence]
+    #                 )
+
+    # TokenizedWord.bulkInsert(tokenizedWords)
+
+    # Build the main script and all dependent data
     script = GameScript.objects.create(
-        title=json["game_content"], version=json["version"]
+        title=json["game_content"],
+        sourceAttributionUrl=json["source_attribute_url"],
+        version=json["version"],
+        comment=json["comment"] or "",
+        isPlayed=json["is_played"] or False,
     )
-    script.save()
+
     for jsonPartition in json["content"]:
         partition = Partition.objects.create(
-            fileName=jsonPartition["source"], script=script
+            fileName=jsonPartition["source"],
+            title=jsonPartition["title"] or "",
+            script=script,
         )
         for jsonEvent in jsonPartition["sections"]:
             event = Event.objects.create(partition=partition)
@@ -198,6 +279,8 @@ def createFromJson(json: dict):
                     sentences=jsonUtterance["speech"],
                     tokenizedSentences=jsonUtterance["tokenized_speech"],
                 )
+
+    script.setWordAndSentenceCounts()
 
 
 def gamescriptToJson(title: str, version: str = None) -> dict:

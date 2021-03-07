@@ -1,34 +1,25 @@
-<!DOCTYPE html>
-<html lang="ja-jp">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Game Corpus</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'gamecorpus/style.css' %}">
-    <script src="{% static 'gamecorpus/corpus.js' %}"></script>
-</head>
-
-<body>
-    <div class="main">
-        <div class='game_title'>{{title}}</div>
-        <div class='script_title'>{{fileName}}</div>
-        {% for event in events %}
-        <table class='script_event'>
-            {% for speaker, role, speechList in event %}
-            {% for speechId, speech in speechList %}
-            <tr class='script_utterance script_utterance_{{role}}'>
-                <td class="dialog_cell speaker_cell" id="{{speechId}}_speaker">
-                    {% if forloop.counter0 == 0 %}
-                    {{speaker}}
-                    {% endif %}
-                </td>
-                <td class="notranslate dialog_cell source_text_cell" id="{{speechId}}_source">{{speech}}</td>
-                <td class="dialog_cell source_text_cell" id="{{speechId}}_translation">{{speech}}</td>
-            </tr>
-            {% endfor %}
-            {% endfor %}
-        </table>
+{% block content %}
+<div class="main">
+    <div class='game_title'>{{game_title}}</div>
+    <div class='script_title'>{{partition_title}}</div>
+    {% for event in events %}
+    <table class='script_event'>
+        {% for speaker, role, speechList in event %}
+        {% for speechId, speech in speechList %}
+        <tr class='script_utterance script_utterance_{{role}}'>
+            <td class="dialog_cell speaker_cell" id="{{speechId}}_speaker">
+                {% if forloop.counter0 == 0 %}
+                {{speaker}}
+                {% endif %}
+            </td>
+            <td class="notranslate dialog_cell source_text_cell" id="{{speechId}}_source">{{speech}}</td>
+            <td class="dialog_cell source_text_cell" id="{{speechId}}_translation">{{speech}}</td>
+        </tr>
         {% endfor %}
-    </div>
-</body>
+        {% endfor %}
+    </table>
+    {% endfor %}
+</div>
+{% endblock %}

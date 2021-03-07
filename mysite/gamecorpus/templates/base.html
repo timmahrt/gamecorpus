@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja-jp">
+
+<head>
+    <meta charset="utf-8">
+    <title>Game Corpus</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'gamecorpus/style.css' %}">
+    <script src="{% static 'gamecorpus/corpus.js' %}"></script>
+</head>
+
+<body>
+    <div class="game_scripts_header">
+        <div class="game_scripts_navigation">
+            <span class="navigation_link">Game Scripts</span>
+            <a href="index.html" class="navigation_link">Full Scripts</a>
+            <a href="search.html" class="navigation_link">Search</a>
+            <a href="how_to_use.html" class="navigation_link">How To Use</a>
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+</body>

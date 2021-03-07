@@ -93,3 +93,25 @@ class GamecorpusTestCase(TestCase):
 
         tokenizedWords = tokenizedSentences[1].tokenizedsentenceword_set.all()
         self.assertEqual(6, len(tokenizedWords))
+
+    def testCharacterCounting(self):
+        script = m.GameScript.objects.all().get(title="Fantasy Adventure")
+        script.setWordAndSentenceCounts()
+
+        self.assertEqual(16, script.numWords)
+        self.assertEqual(4, script.numSentences)
+
+    def testBulkWordInsert(self):
+        beforeNumWords = m.TokenizedWord.objects.all().count()
+
+        m.TokenizedWord.bulkInsert(
+            (
+                ("雨", "名詞", "雨"),  # New word
+                ("昼ごはん", "名詞", "昼ごはん"),  # Old word
+                ("が", "助詞", "が"),  # New word
+            )
+        )
+        afterNumWords = m.TokenizedWord.objects.all().count()
+
+        self.assertEqual(14, beforeNumWords)
+        self.assertEqual(16, afterNumWords)

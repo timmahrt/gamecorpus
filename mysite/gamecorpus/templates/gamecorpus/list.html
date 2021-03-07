@@ -1,30 +1,37 @@
-<!DOCTYPE html>
-<html lang="ja-jp">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Game Corpus</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'gamecorpus/style.css' %}">
-    <script src="{% static 'gamecorpus/corpus.js' %}"></script>
-</head>
-
-<body>
-    <div class="main">
-        <div class="page_title">
-            Game Corpus Scripts
-        </div>
-        <div class="description">
-            The search function will search through the full script of the following texts. Here it is possible to read
-            through the full texts.
-        </div>
-        <div class="description">
-            List of available works:
-        </div>
-        {% for title in availables_game_titles %}
-        <div class="game_link">
-            <a href="scriptSections.html?title={{title}}">{{title}}</a>
-        </div>
-        {% endfor %}
+{% block content %}
+<div class="main">
+    <div class="page_title">
+        Game Corpus Scripts
     </div>
-</body>
+    <div class="description">
+        The search function will search through the full script of the following texts. Here it is possible to read
+        through the full texts.
+    </div>
+    <div class="game_link title_row">
+        <span class="has_played"></span>
+        <span class="game_link_title">Game Script</span>
+        <span class="game_source_link">Source</span>
+    </div>
+    {% for title, is_played, source_attribution_link in availables_game_titles %}
+    <div class="game_link">
+        <span class="has_played">
+            {% if is_played %}
+            *
+            {% endif %}
+        </span>
+        <span class="game_link_title">
+            <a href="scriptSections.html?title={{title}}">{{title}}</a>
+        </span>
+        <span class="game_source_link">
+            <a href="{{source_attribution_link}}" target="_blank">text source</a>
+        </span>
+    </div>
+    {% endfor %}
+
+    <div class="description">
+        Items marked with * have been played through using this script.
+    </div>
+</div>
+{% endblock %}

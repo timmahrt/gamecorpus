@@ -5,8 +5,8 @@
 }
 .search {
   margin: 20px;
-  margin-top: 0;
-  padding-top: 20px;
+  margin-top: 40px;
+  padding-top: 0;
   position: fixed;
   z-index: 2;
   background-color: white;
@@ -135,4 +135,37 @@ width: 800px;
   padding-bottom: 25px;
   width: 400px;
   margin: auto;
+}
+.partition_row {
+  display: inline-block;
+}
+.partition_sentence_count {
+  width: 100px;
+}
+.partition_word_count {
+  width: 100px;
+}
+.game_link_title {
+  display: inline-block;
+}
+.has_played {
+  display: inline-block;
+  width: 20px;
+}
+.title_row {
+  font-weight: 600;
+}
+.game_link_title {
+  width: 400px;
+}
+.game_scripts_title {
+  display: inline-block;
+  width: 300px;
+  padding-left: 40px;
+}
+.game_scripts_navigation {
+  display: inline-block;
+}
+.navigation_link {
+  padding-left: 40px;
 }

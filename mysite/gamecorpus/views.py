@@ -46,9 +46,10 @@ def index(request):
 
 
 def scripts(request):
-    gameScripts = models.GameScript.objects.values("title").all()
-    gameTitles = [gameScript["title"] for gameScript in gameScripts]
-    context = {"availables_game_titles": gameTitles}
+    scripts = models.GameScript.objects.values_list(
+        "title", "isPlayed", "sourceAttributionUrl"
+    ).all()
+    context = {"availables_game_titles": scripts}
 
     return render(request, "gamecorpus/list.html", context)
 
@@ -56,9 +57,27 @@ def scripts(request):
 def scriptSections(request):
     title = request.GET["title"]
     script = models.GameScript.objects.get(title=title)
-    partitions = script.partition_set.values("fileName").all()
-    fileNames = [partition["fileName"] for partition in partitions]
-    context = {"title": title, "available_partition_names": fileNames}
+    comment = script.comment
+    partitions = script.partition_set.values(
+        "fileName", "title", "numWords", "numSentences"
+    ).all()
+    fileInfo = [
+        [
+            i + 1,
+            partition["fileName"],
+            partition["title"],
+            partition["numWords"],
+            partition["numSentences"],
+        ]
+        for i, partition in enumerate(partitions)
+    ]
+    context = {
+        "title": title,
+        "comment": comment,
+        "available_partitions": fileInfo,
+        "total_sentence_count": script.numSentences,
+        "total_word_count": script.numWords,
+    }
 
     return render(request, "gamecorpus/game_sections.html", context)
 
@@ -98,8 +117,8 @@ def script(request):
         events.append(utterances)
 
     context = {
-        "title": title,
-        "fileName": os.path.splitext(partitionName)[0],
+        "game_title": title,
+        "partition_title": partition.title,
         "events": events,
     }
 
