@@ -3,6 +3,9 @@
 import os
 import sys
 
+# TODO: This should probably actually become an environment variable
+os.environ["DJANGO_SETTINGS_MODULE"] = "mysite.development_settings"
+
 
 def main():
     """Run administrative tasks."""
