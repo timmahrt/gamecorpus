@@ -43,7 +43,9 @@ def search(request):
         if form.is_valid():
             searchRe = form.cleaned_data["search_text"]
 
-            tokenized = "tokenized" in request.GET
+            tokenized = form.cleaned_data["search_tokenized"]
+            if tokenized:
+                searchRe = f".*{searchRe}.*"
             posList = []
             if tokenized:
                 posList = list(filter(lambda x: x in request.GET, POS_LIST))
