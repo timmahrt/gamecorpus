@@ -46,12 +46,13 @@ def search(request):
             tokenized = form.cleaned_data["search_tokenized"]
             if tokenized:
                 searchRe = f".*{searchRe}.*"
+
             posList = []
             if tokenized:
                 posList = list(filter(lambda x: x in request.GET, POS_LIST))
 
             limitPerGame = _getNumberFromInput(request, "hits_per_game", 1)
-            limit = _getNumberFromInput(request, "total_hits", 10)
+            limit = _getNumberFromInput(request, "total_hits", None)
 
             start = time.time()
             searchResults = services.searchDb(
