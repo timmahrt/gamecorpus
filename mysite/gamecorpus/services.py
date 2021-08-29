@@ -35,7 +35,7 @@ def _iterateTexts(root):
                     yield gameData["game_content"], utterance
 
 
-def searchDb(root, reStr, posList, tokenized, limitPerGame=1, limit=10):
+def searchDb(root, reStr, posList, tokenized, limitPerGame=1, limit=None):
     if tokenized:
         matches = _tokenizedDbSearch(reStr, posList, limitPerGame, limit)
     else:
@@ -44,9 +44,10 @@ def searchDb(root, reStr, posList, tokenized, limitPerGame=1, limit=10):
     return matches
 
 
-def _tokenizedDbSearch(reStr, posList, limitPerGame=1, limit=10):
+def _tokenizedDbSearch(reStr, posList, limitPerGame=1, limit=None):
     matches = []
 
+    countsByTitle = {}
     searchRe = re.compile(reStr)
     words = models.TokenizedWord.objects.all()
     if posList:
@@ -62,6 +63,12 @@ def _tokenizedDbSearch(reStr, posList, limitPerGame=1, limit=10):
                     tokenizedSentenceWord.sentence
                 )
 
+                title = utterance.event.partition.script.title
+                countsByTitle.setdefault(title, 0)
+                if limit and countsByTitle[title] >= limitPerGame:
+                    continue
+                countsByTitle[title] += 1
+
                 matches.append(
                     {
                         "title": utterance.event.partition.script.title,
@@ -74,34 +81,44 @@ def _tokenizedDbSearch(reStr, posList, limitPerGame=1, limit=10):
                         ),
                     }
                 )
-                if len(matches) > limit:
+                if limit and len(matches) > limit:
                     break
 
-        if len(matches) >= limit:
+        if limit and len(matches) >= limit:
             matches = matches[:limit]
             break
 
     return matches
 
 
-def _dbSearch(reStr, limitPerGame=1, limit=10):
+def _dbSearch(reStr, limitPerGame=1, limit=None):
     matches = []
+    if limitPerGame is not None:
+        limit = None
 
     searchRe = re.compile(reStr)
-    print(len(models.Sentence.objects.all()))
+    countsByTitle = {}
+
     for i, sentence in enumerate(models.Sentence.objects.all()):
         match = searchRe.search(sentence.text)
         if match:
             matchTxt = match.group(0)
+
+            title = sentence.utterance.event.partition.script.title
+            countsByTitle.setdefault(title, 0)
+            if limitPerGame and countsByTitle[title] >= limitPerGame:
+                continue
+            countsByTitle[title] += 1
+
             matches.append(
                 {
-                    "title": sentence.utterance.event.partition.script.title,
+                    "title": title,
                     "speaker": sentence.utterance.speaker,
                     "match": matchTxt,
                     "sentence": wrapMatch(sentence.text, matchTxt),
                 }
             )
-            if len(matches) >= limit:
+            if limit and len(matches) >= limit:
                 break
 
     return matches
@@ -147,7 +164,6 @@ def _tokenizedSearch(root, searchRe, posList, limitPerGame):
                         "match": word,
                         "sentence": highlightedText,
                     }
-                    break
 
 
 def _search(root, searchRe, _posList, limitPerGame):
