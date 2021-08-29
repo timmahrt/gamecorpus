@@ -65,7 +65,7 @@ def _tokenizedDbSearch(reStr, posList, limitPerGame=1, limit=None):
 
                 title = utterance.event.partition.script.title
                 countsByTitle.setdefault(title, 0)
-                if limit and countsByTitle[title] >= limitPerGame:
+                if limitPerGame and countsByTitle[title] >= limitPerGame:
                     continue
                 countsByTitle[title] += 1
 
@@ -87,6 +87,8 @@ def _tokenizedDbSearch(reStr, posList, limitPerGame=1, limit=None):
         if limit and len(matches) >= limit:
             matches = matches[:limit]
             break
+
+    matches.sort(key=lambda match: match["title"])
 
     return matches
 
