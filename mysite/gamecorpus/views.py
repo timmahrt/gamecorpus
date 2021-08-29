@@ -1,6 +1,8 @@
 import os
+import time
 
 from django.shortcuts import render
+from django import forms
 
 from gamecorpus import services
 from gamecorpus import models
@@ -31,30 +33,105 @@ def about(request):
 
 def search(request):
     searchResults = []
-    if "search_text" in request.GET:
-        searchRe = request.GET["search_text"]
 
-        tokenized = "tokenized" in request.GET
-        posList = []
-        if tokenized:
-            posList = ["N", "V", "Adv", "Adj", "Adn", "AdjN"]
-            posList = list(filter(lambda x: x in request.GET, posList))
+    if "search_text" not in request.GET.keys():
+        form = SearchForm(request.GET)
+    else:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            searchRe = form.cleaned_data["search_text"]
 
-        limitPerGame = _getNumberFromInput(request, "hits_per_game", 1)
-        limit = _getNumberFromInput(request, "total_hits", 10)
+            tokenized = "tokenized" in request.GET
+            posList = []
+            if tokenized:
+                posList = ["N", "V", "Adv", "Adj", "Adn", "AdjN"]
+                posList = list(filter(lambda x: x in request.GET, posList))
 
-        searchResults = services.searchDb(
-            os.path.join(dir_path, "data"),
-            searchRe,
-            posList,
-            tokenized,
-            limitPerGame=limitPerGame,
-            limit=limit,
-        )
+            limitPerGame = _getNumberFromInput(request, "hits_per_game", 1)
+            limit = _getNumberFromInput(request, "total_hits", 10)
 
-    context = {"search_results": searchResults}
+            start = time.time()
+            searchResults = services.searchDb(
+                os.path.join(dir_path, "data"),
+                searchRe,
+                posList,
+                tokenized,
+                limitPerGame=limitPerGame,
+                limit=limit,
+            )
+            stop = time.time()
+
+    context = {"form": form, "search_results": searchResults}
 
     return render(request, "gamecorpus/search.html", context)
+
+
+class SearchForm(forms.Form):
+    pass
+    search_text = forms.CharField(required=True)
+    search_tokenized = forms.BooleanField(
+        help_text="Search Tokenized Text",
+        label="Search Tokenized Text",
+        required=False,
+    )
+    noun_flag = forms.BooleanField(
+        help_text="Noun",
+        label="Noun",
+        required=False,
+    )
+    verb_flag = forms.BooleanField(
+        help_text="Verb",
+        label="Verb",
+        required=False,
+    )
+    adjective_flag = forms.BooleanField(
+        help_text="Adjective", label="Adjective", required=False
+    )
+    adverb_flag = forms.BooleanField(
+        help_text="Adverb",
+        label="Adverb",
+        required=False,
+    )
+    adnomial_flag = forms.BooleanField(
+        help_text="Adnominal", label="Adnominal", required=False
+    )
+    adjectival_noun_flag = forms.BooleanField(
+        help_text="Adjectival Noun",
+        label="Adjectival Noun",
+        required=False,
+    )
+    hits_per_game = forms.IntegerField(initial=1, label="Hits / game", required=False)
+    total_hits = forms.IntegerField(initial=None, label="Total hits", required=False)
+
+    posCheckboxes = [
+        "noun_flag",
+        "verb_flag",
+        "adjective_flag",
+        "adverb_flag",
+        "adnomial_flag",
+        "adjectival_noun_flag",
+    ]
+
+    def __init__(self, request, *args, **kwargs):
+        super(SearchForm, self).__init__(request, *args, **kwargs)
+
+        disabledStatus = True
+        if (
+            request
+            and "search_tokenized" in request.keys()
+            and request["search_tokenized"] == "on"
+        ):
+            disabledStatus = False
+
+        if disabledStatus:
+            for id in self.posCheckboxes:
+                self.fields[id].widget.attrs["disabled"] = "true"
+
+        for id in self.posCheckboxes:
+            self.fields[id].widget.attrs["id"] = id
+
+        # https://stackoverflow.com/questions/15261286/django-forms-disable-field-if-booleanfield-is-checked
+        self.fields["search_tokenized"].widget.attrs["onclick"] = "toggleTokenized();"
 
 
 def gameScripts(request):
