@@ -9,38 +9,45 @@
       {{ form.search_text }}
     </div>
     <div class="pos-checklist">
-      {{ form.search_tokenized.label_tag }}
-      {{ form.search_tokenized }}
-      <span class='tooltip-anchor'>
-        (?)
-        <span class='tooltip'>
-          If 'tokenized' is selected, corpus texts are split up by word and each word's part-of-speech is analyzed.
-          Queries will then only be over individual words.
+      <span class="pos-checkbox">
+        <span class='tooltip-anchor'>
+          {{ form.search_tokenized.label_tag }}
+          <span class='tooltip'>
+            If 'tokenized' is selected, corpus texts are split up by word and each word's part-of-speech is analyzed.
+            Queries will then only be over individual words.
+          </span>
         </span>
+        {{ form.search_tokenized }}
       </span>
-      <span class="pos-checkbox">
-        {{ form.noun_flag.label_tag }}
-        {{ form.noun_flag }}
-      </span>
-      <span class="pos-checkbox">
-        {{ form.verb_flag.label_tag }}
-        {{ form.verb_flag }}
-      </span>
-      <span class="pos-checkbox">
-        {{ form.adjective_flag.label_tag }}
-        {{ form.adjective_flag }}
-      </span>
-      <span class="pos-checkbox">
-        {{ form.adverb_flag.label_tag }}
-        {{ form.adverb_flag }}
-      </span>
-      <span class="pos-checkbox">
-        {{ form.adnomial_flag.label_tag }}
-        {{ form.adnomial_flag }}
-      </span>
-      <span class="pos-checkbox">
-        {{ form.adjectival_noun_flag.label_tag }}
-        {{ form.adjectival_noun_flag }}
+      <span>
+        <span>
+          <span class="pos-checkbox">
+            {{ form.N.label_tag }}
+            {{ form.N }}
+          </span>
+          <span class="pos-checkbox">
+            {{ form.V.label_tag }}
+            {{ form.V }}
+          </span>
+          <span class="pos-checkbox">
+            {{ form.Adj.label_tag }}
+            {{ form.Adj }}
+          </span>
+        </span>
+        <span>
+          <span class="pos-checkbox">
+            {{ form.Adv.label_tag }}
+            {{ form.Adv }}
+          </span>
+          <span class="pos-checkbox">
+            {{ form.Adn.label_tag }}
+            {{ form.Adn }}
+          </span>
+          <span class="pos-checkbox">
+            {{ form.AdjN.label_tag }}
+            {{ form.AdjN }}
+          </span>
+        </span>
       </span>
     </div>
     <div class="limit-options">

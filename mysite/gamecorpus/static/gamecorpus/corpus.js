@@ -1,6 +1,6 @@
 
 function toggleTokenized() {
-  let posList = ['noun_flag', 'verb_flag', 'adjective_flag', 'adverb_flag', 'adnomial_flag', 'adjectival_noun_flag'];
+  let posList = ['N', 'V', 'Adj', 'Adv', 'Adn', 'AdjN'];
   posList.forEach((pos) => {
     let posCheckbox = document.getElementById(pos);
     posCheckbox.disabled = !posCheckbox.disabled;
